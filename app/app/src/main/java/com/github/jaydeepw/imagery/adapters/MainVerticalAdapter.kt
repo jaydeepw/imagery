@@ -9,14 +9,38 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.jaydeepw.imagery.R
 import com.github.jaydeepw.imagery.models.Photo
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_header.view.*
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 class MainVerticalAdapter(val context: Context?, var items: ArrayList<Any>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val v: View = LayoutInflater.from(parent.context).inflate(R.layout.item_photo, parent, false)
-        return PhotoViewHolder(v)
+    companion object {
+        const val TYPE_HEADER = 0
+        const val TYPE_DATA = 1
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            TYPE_HEADER -> {
+                val v: View =
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
+                return HeaderViewHolder(v)
+            }
+
+            TYPE_DATA -> {
+                val v: View =
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_photo, parent, false)
+                return PhotoViewHolder(v)
+            }
+
+            else -> {
+                val v: View =
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
+                return HeaderViewHolder(v)
+            }
+        }
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -28,7 +52,16 @@ class MainVerticalAdapter(val context: Context?, var items: ArrayList<Any>) :
                 .placeholder(android.R.drawable.ic_lock_idle_alarm)
                 .into(holder.itemView.imageViewPhoto)
         } else {
+            val heading = items[position] as String
+            Log.d("Adapter", "heading $heading")
+            holder.itemView.textViewHeader.text = heading
+        }
+    }
 
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is Photo -> TYPE_DATA
+            else -> TYPE_HEADER
         }
     }
 
@@ -37,6 +70,8 @@ class MainVerticalAdapter(val context: Context?, var items: ArrayList<Any>) :
     }
 
     class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // var imageViewPhoto: TextView = itemView.findViewById(R.id.imageViewPhoto)
+    }
+
+    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 }
