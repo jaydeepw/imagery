@@ -43,17 +43,11 @@ class PhotosAdapter(val context: Context?, var items: ArrayList<Photo>) :
                 val photo = items[position]
                 val url = photo.url
                 Log.d("Adapter", "photo.url ${url}")
-                // holder.itemView.textViewHeader2.text = heading
                 Picasso.get().load(url)
                     .placeholder(android.R.drawable.ic_lock_idle_alarm)
                     .into(holder.itemView.imageViewPhoto)
 
-                /*val list = items[position] as ArrayList<Any>
-                Log.d("Adapter", "photos.list ${list.size}")
-                val layoutManager = LinearLayoutManager(holder.itemView.context)
-                layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                holder.itemView.recyclerView.layoutManager = layoutManager
-                holder.itemView.recyclerView.adapter = PhotosAdapter(holder.itemView.context, list)*/
+                holder.itemView.textViewPhotoTitle.text = photo.title
             }
             is MessageViewHolder -> {
                 val heading = items[position] as String

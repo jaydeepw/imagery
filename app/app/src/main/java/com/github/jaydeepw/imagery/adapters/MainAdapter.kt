@@ -17,14 +17,13 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        const val TYPE_HEADER = 0
+        const val TYPE_MESSAGE_HEADER = 0
         const val TYPE_DATA = 1
-        const val TYPE_RECYCLERVIEW = 2
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
-            TYPE_HEADER -> {
+            TYPE_MESSAGE_HEADER -> {
                 val v: View =
                     LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
                 return HeaderViewHolder(v)
@@ -69,9 +68,6 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
                 Log.d("Adapter", "heading $heading")
                 holder.itemView.textViewHeader.text = heading
             }
-            is RecyclerViewHolder -> {
-
-            }
             else -> {
                 val heading = "Invalid view to show"
                 Log.e("Adapter", "heading $heading")
@@ -83,7 +79,7 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
             is AdapterItem -> TYPE_DATA
-            else -> TYPE_HEADER
+            else -> TYPE_MESSAGE_HEADER
         }
     }
 
@@ -92,9 +88,6 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
     }
 
     class AdapterItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    }
-
-    class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

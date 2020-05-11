@@ -34,12 +34,10 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val photos = getRandomDogPhotos(4)
-
-        val adapterItem1 = AdapterItem("Dogs", photos)
-        val adapterItem2 = AdapterItem("Yak", photos)
-        val adapterItem3 = AdapterItem("Sheep", photos)
-        val adapterItem4 = AdapterItem("Dear", photos)
+        val adapterItem1 = AdapterItem("Dogs", getRandomDogPhotos(4))
+        val adapterItem2 = AdapterItem("Yak", getRandomDogPhotos(4))
+        val adapterItem3 = AdapterItem("Sheep", getRandomDogPhotos(4))
+        val adapterItem4 = AdapterItem("Dear", getRandomDogPhotos(4))
         val adapterItems = arrayListOf(
             adapterItem1, adapterItem2,
             adapterItem3, adapterItem4
