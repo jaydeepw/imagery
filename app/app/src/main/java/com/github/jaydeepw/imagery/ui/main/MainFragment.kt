@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.jaydeepw.imagery.R
 import com.github.jaydeepw.imagery.adapters.MainAdapter
+import com.github.jaydeepw.imagery.models.AdapterItem
 import com.github.jaydeepw.imagery.utils.getRandomDogPhotos
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -35,17 +36,16 @@ class MainFragment : Fragment() {
 
         val photos = getRandomDogPhotos(4)
 
-        val list = arrayListOf(
-            "Dogs",
-            photos,
-            "Pups",
-            photos,
-            "Cats",
-            photos,
-            "Kittens",
-            photos
+        val adapterItem1 = AdapterItem("Dogs", photos)
+        val adapterItem2 = AdapterItem("Yak", photos)
+        val adapterItem3 = AdapterItem("Sheep", photos)
+        val adapterItem4 = AdapterItem("Dear", photos)
+        val adapterItems = arrayListOf(
+            adapterItem1, adapterItem2,
+            adapterItem3, adapterItem4
         )
-        mainVerticalAdapter = MainAdapter(requireContext(), list)
+
+        mainVerticalAdapter = MainAdapter(requireContext(), adapterItems as ArrayList<Any>)
 
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL

@@ -5,42 +5,33 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.jaydeepw.imagery.R
-import com.github.jaydeepw.imagery.models.AdapterItem
 import com.github.jaydeepw.imagery.models.Photo
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_header.view.*
-import kotlinx.android.synthetic.main.item_recyclerview.view.*
+import kotlinx.android.synthetic.main.item_photo.view.*
 
-class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
+class PhotosAdapter(val context: Context?, var items: ArrayList<Photo>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        const val TYPE_HEADER = 0
         const val TYPE_DATA = 1
-        const val TYPE_RECYCLERVIEW = 2
+        const val TYPE_MSG_VIEW = 2
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType) {
-            TYPE_HEADER -> {
-                val v: View =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-                return HeaderViewHolder(v)
-            }
-
+        return when (viewType) {
             TYPE_DATA -> {
                 val v: View =
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_recyclerview, parent, false)
-                return AdapterItemViewHolder(v)
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_photo, parent, false)
+                AdapterItemViewHolder(v)
             }
 
             else -> {
                 val v: View =
                     LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-                return HeaderViewHolder(v)
+                MessageViewHolder(v)
             }
         }
 
@@ -49,28 +40,25 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is AdapterItemViewHolder -> {
-                // show heading
-                val adapterItem = items[position] as AdapterItem
-                val heading = adapterItem.heading
-                Log.d("Adapter", "heading $heading")
-                holder.itemView.textViewHeader2.text = heading
+                val photo = items[position]
+                val url = photo.url
+                Log.d("Adapter", "photo.url ${url}")
+                // holder.itemView.textViewHeader2.text = heading
+                Picasso.get().load(url)
+                    .placeholder(android.R.drawable.ic_lock_idle_alarm)
+                    .into(holder.itemView.imageViewPhoto)
 
-                // show photos list
-                val list = adapterItem.list
+                /*val list = items[position] as ArrayList<Any>
                 Log.d("Adapter", "photos.list ${list.size}")
                 val layoutManager = LinearLayoutManager(holder.itemView.context)
                 layoutManager.orientation = LinearLayoutManager.HORIZONTAL
                 holder.itemView.recyclerView.layoutManager = layoutManager
-                holder.itemView.recyclerView.adapter =
-                    PhotosAdapter(holder.itemView.context, list as ArrayList<Photo>)
+                holder.itemView.recyclerView.adapter = PhotosAdapter(holder.itemView.context, list)*/
             }
-            is HeaderViewHolder -> {
+            is MessageViewHolder -> {
                 val heading = items[position] as String
                 Log.d("Adapter", "heading $heading")
                 holder.itemView.textViewHeader.text = heading
-            }
-            is RecyclerViewHolder -> {
-
             }
             else -> {
                 val heading = "Invalid view to show"
@@ -82,8 +70,8 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is AdapterItem -> TYPE_DATA
-            else -> TYPE_HEADER
+            is Photo -> TYPE_DATA
+            else -> TYPE_MSG_VIEW
         }
     }
 
@@ -94,9 +82,6 @@ class MainAdapter(val context: Context?, var items: ArrayList<Any>) :
     class AdapterItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
-    class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    }
-
-    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 }
